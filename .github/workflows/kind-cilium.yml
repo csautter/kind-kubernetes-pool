@@ -20,3 +20,7 @@ jobs:
         - name: Install dependencies
           run: |
             bash cluster-pool/cilium/install_dependencies.sh
+        - name: Create Kind cluster
+          working-directory: cluster-pool/cilium
+          run: |
+            bash install.sh
