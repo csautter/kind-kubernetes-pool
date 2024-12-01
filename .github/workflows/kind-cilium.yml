@@ -23,6 +23,7 @@ jobs:
         #  uses: douglascamata/setup-docker-macos-action@v1-alpha.14
 
         - name: Install dependencies
+          shell: bash
           run: |
             bash cluster-pool/cilium/install_dependencies.sh
 
