@@ -20,6 +20,23 @@ jobs:
         - name: Install dependencies
           run: |
             bash cluster-pool/cilium/install_dependencies.sh
+          # Install and execute Docker
+        - name: Install Docker Desktop
+          if: runner.os == 'macOS'
+          run: |
+            if ! brew list --cask docker &> /dev/null; then
+              brew install --cask docker;
+            fi
+            open -a Docker
+            # Wait for Docker to start
+            while ! docker system info > /dev/null 2>&1; do
+              echo "Waiting for Docker to start..."
+              sleep 5
+            done
+            echo "Docker is running!"
+          # Verify Docker is working
+        - name: Verify Docker
+          run: docker run hello-world
         - name: Create Kind cluster
           working-directory: cluster-pool/cilium
           run: |
