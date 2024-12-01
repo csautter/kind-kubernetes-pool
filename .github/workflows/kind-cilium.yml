@@ -1,0 +1,22 @@
+name: Kind Cilium cluster
+on:
+    push:
+        branches:
+        - main
+        - feat*
+    pull_request:
+        branches:
+        - main
+jobs:
+    test:
+        strategy:
+            matrix:
+                k8s_version: [1.31.3]
+                os: [macos-latest] # TODO: ubuntu-latest
+        runs-on: ${{ matrix.os }}
+        steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+        - name: Install dependencies
+          run: |
+            bash cluster-pool/cilium/install_dependencies.sh
