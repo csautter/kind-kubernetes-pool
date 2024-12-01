@@ -12,36 +12,17 @@ jobs:
         strategy:
             matrix:
                 k8s_version: [1.31.3]
-                os: [macos-latest] # TODO: ubuntu-latest
+                os: [macos-13] # TODO: ubuntu-latest
         runs-on: ${{ matrix.os }}
         steps:
         - name: Checkout
           uses: actions/checkout@v4
+        - name: Setup Docker on macOS
+          if: matrix.os == 'macos-13'
+          uses: douglascamata/setup-docker-macos-action@v1-alpha.14
         - name: Install dependencies
           run: |
             bash cluster-pool/cilium/install_dependencies.sh
-      # Install Podman using Homebrew
-        - name: Install Podman
-          run: |
-            brew install podman
-            podman --version
-
-      # Initialize Podman
-        - name: Initialize Podman
-          run: |
-            podman machine init
-            podman machine start
-            podman info
-
-      # Pull and Run a Container
-        - name: Pull and Run a Container
-          run: |
-            podman pull alpine
-            podman run --rm alpine echo "Hello from Podman!"
-
-      # List Containers (example command)
-        - name: List Containers
-          run: podman ps -a
 
         - name: Verify Docker is working
           run: docker run hello-world
