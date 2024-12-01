@@ -1,0 +1,38 @@
+name: Kind Cilium cluster
+on:
+    push:
+        branches:
+        - main
+        - feat*
+    pull_request:
+        branches:
+        - main
+jobs:
+    test:
+        strategy:
+            matrix:
+                k8s_version: [1.31.2]
+                os: [macos-13, ubuntu-24.04]
+        runs-on: ${{ matrix.os }}
+        steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+
+        #- name: Setup Docker on macOS
+        #  if: matrix.os == 'macos-13'
+        #  uses: douglascamata/setup-docker-macos-action@v1-alpha.14
+
+        - name: Install dependencies
+          shell: bash
+          run: |
+            bash cluster-pool/cilium/install_dependencies.sh
+
+        - name: Verify Docker is working
+          run: docker run hello-world
+          if: matrix.os != 'macos-13'
+
+        - name: Create Kind cluster
+          working-directory: cluster-pool/cilium
+          if: matrix.os != 'macos-13'
+          run: |
+            bash install.sh

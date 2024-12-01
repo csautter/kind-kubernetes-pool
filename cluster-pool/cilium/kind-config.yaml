@@ -2,6 +2,8 @@ kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 name: cilium-cluster
 nodes:
+  # TODO: fix the kubernetes version
+  # https://kind.sigs.k8s.io/docs/user/configuration/#kubernetes-version
 - role: control-plane
 - role: worker
 - role: worker

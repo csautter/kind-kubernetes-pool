@@ -32,8 +32,6 @@ fi
 
 ls -al /proc/self/ns/cgroup || true
 
-brew install cilium-cli
-
 cilium status --wait
 
 # cilium connectivity test
