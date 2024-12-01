@@ -13,10 +13,11 @@ fi
 # Function to install a tool using Homebrew or apt-get
 install_tool() {
   local tool=$1
+  local options=$2
   if [[ "$OSTYPE" == "darwin"* ]]; then
     if ! brew list $tool &> /dev/null; then
       echo "Installing $tool using Homebrew..."
-      brew install $tool
+      brew install $options $tool
     else
       echo "$tool is already installed."
     fi
@@ -32,7 +33,9 @@ install_tool() {
 }
 
 # Install required tools
-install_tool docker
+if ! command -v docker &> /dev/null && ! command -v podman &> /dev/null; then
+  install_tool docker --cask
+fi
 install_tool helm
 install_tool kubectl
 install_tool kind
