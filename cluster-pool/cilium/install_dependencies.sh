@@ -33,9 +33,9 @@ install_tool() {
 }
 
 # Install required tools
-if ! command -v docker &> /dev/null && ! command -v podman &> /dev/null; then
-  install_tool docker --cask
-fi
+# if ! command -v docker &> /dev/null && ! command -v podman &> /dev/null; then
+#   install_tool docker --cask
+# fi
 install_tool helm
 install_tool kubectl
 install_tool kind
