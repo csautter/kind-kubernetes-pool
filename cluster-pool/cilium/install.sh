@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
+set -e
+
 # https://docs.cilium.io/en/stable/installation/kind/
 
 KIND_CONFIG="kind-config.yaml"
 KIND_CLUSTER_NAME=$(yq '.name' < $KIND_CONFIG)
 KUBECONTEXT="kind-$KIND_CLUSTER_NAME"
-HELM_KUBECONTEXT=$KUBECONTEXT
+export HELM_KUBECONTEXT=$KUBECONTEXT
 
 kind create cluster --config=$KIND_CONFIG
 kubectl cluster-info --context $KUBECONTEXT
@@ -28,7 +30,7 @@ if [ "$CGROUP_CP" == "$CGROUP_W" ]; then
   exit 1
 fi
 
-ls -al /proc/self/ns/cgroup
+ls -al /proc/self/ns/cgroup || true
 
 brew install cilium-cli
 
@@ -39,13 +41,11 @@ cilium status --wait
 cilium hubble enable
 
 # cilium hubble port-forward&
-
-hubble status
-
-hubble observe
+# hubble status
+# hubble observe
 
 cilium hubble enable --ui
 
 cilium status --wait
 
-#cilium hubble ui&
+# cilium hubble ui&
