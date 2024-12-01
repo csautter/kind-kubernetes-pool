@@ -2,10 +2,17 @@
 
 set -e
 
+# Check for sudo and install if not present
+if ! command -v sudo &> /dev/null; then
+  echo "sudo not found. Installing sudo..."
+  apt-get update
+  apt-get install -y sudo
+fi
+
 # Function to add apt repositories
 add_apt_repositories() {
-  apt-get update
-  apt-get install -y apt-transport-https curl gnupg sudo
+  sudo apt-get update
+  sudo apt-get install -y apt-transport-https curl gnupg
   # Add the Helm repository
   curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
   echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
@@ -78,11 +85,6 @@ fi
 # linux specific
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
   add_apt_repositories
-
-  if ! command -v sudo &> /dev/null; then
-    echo "sudo not found. Installing sudo..."
-    apt-get install -y sudo
-  fi
 
   # Install linux specific required tools
   # Check for Docker and install if not present
