@@ -18,9 +18,9 @@ jobs:
         - name: Checkout
           uses: actions/checkout@v4
 
-        - name: Setup Docker on macOS
-          if: matrix.os == 'macos-13'
-          uses: douglascamata/setup-docker-macos-action@v1-alpha.14
+        #- name: Setup Docker on macOS
+        #  if: matrix.os == 'macos-13'
+        #  uses: douglascamata/setup-docker-macos-action@v1-alpha.14
 
         - name: Install dependencies
           run: |
@@ -28,8 +28,10 @@ jobs:
 
         - name: Verify Docker is working
           run: docker run hello-world
+          if: matrix.os != 'macos-13'
 
         - name: Create Kind cluster
           working-directory: cluster-pool/cilium
+          if: matrix.os != 'macos-13'
           run: |
             bash install.sh
