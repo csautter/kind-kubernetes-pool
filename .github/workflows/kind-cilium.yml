@@ -11,15 +11,17 @@ jobs:
     test:
         strategy:
             matrix:
-                k8s_version: [1.31.3]
-                os: [macos-13] # TODO: ubuntu-latest
+                k8s_version: [1.31.2]
+                os: [macos-13, ubuntu-24.04]
         runs-on: ${{ matrix.os }}
         steps:
         - name: Checkout
           uses: actions/checkout@v4
+
         - name: Setup Docker on macOS
           if: matrix.os == 'macos-13'
           uses: douglascamata/setup-docker-macos-action@v1-alpha.14
+
         - name: Install dependencies
           run: |
             bash cluster-pool/cilium/install_dependencies.sh
